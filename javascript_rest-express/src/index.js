@@ -147,8 +147,30 @@ app.get('/feed', async (req, res) => {
   res.json(posts)
 })
 
-const server = app.listen(3000, () =>
+
+//will create our profile endpoint here
+app.post('user/:id/profile',  async(req, res) =>{
+  const {id} = req.params
+  const {bio} = req.body
+
+  const profile = await prisma.profile.create({
+    data:{
+      bio,
+      user:{
+        connect:{
+          id: Number(id)
+        }
+      }
+    }
+  })
+
+  res.send(profile);
+})
+
+
+
+const server = app.listen(3001, () =>
   console.log(`
-🚀 Server ready at: http://localhost:3000
+🚀 Server ready at: http://localhost:3001
 ⭐️ See sample requests: http://pris.ly/e/js/rest-express#3-using-the-rest-api`),
 )
